@@ -1,3 +1,11 @@
+import { Corner, Receiver } from "./classes.js";
+let nameData;
+fetch("./names.json")
+  .then((res) => res.json())
+  .then((data) => {
+    nameData = data;
+  });
+
 const qbButton = document.getElementById("qbButton");
 const wrButton = document.getElementById("wrButton");
 const cbButton = document.getElementById("cbButton");
@@ -18,6 +26,8 @@ let cbSpeed = 0;
 let cbAccel = 0;
 let cover = 0;
 let cbCatch = 0;
+
+let max = Math.floor(100);
 
 const qbObj = {
   speed,
@@ -46,10 +56,8 @@ const cbObj = {
 let wrOpen = { value: false };
 
 const openHandler = {
-  set(obj, prop) {
-    if (prop === true) {
-      return Reflect.set(...arguments);
-    }
+  set(target, prop, value) {
+    target[prop] = value;
   },
 };
 
@@ -60,10 +68,10 @@ let speedMarginOfV;
 let coverMarginOfV;
 let catchMarginOfV;
 
-const statGen = (min, max) => {
+const statGen = (min, maxArg) => {
   min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  maxArg = Math.floor(maxArg);
+  return Math.floor(Math.random() * (maxArg - min + 1)) + min;
 };
 
 const qbMaker = (qbObj) => {
@@ -115,17 +123,32 @@ const cbMaker = (cbObj) => {
   obj.cover = statGen(60, 99);
   obj.cbCatch = statGen(60, 99);
 
+  const firstName = Object.values(
+    nameData.cbFirstNames[(Math.random() * 10) | 0]
+  );
+  const lastName = Object.values(
+    nameData.cbLastNames[(Math.random() * 10) | 0]
+  );
+
   let display = document.createElement("div");
   display.id = "cbDisplay";
 
   document.body.appendChild(display);
   document.getElementById("cbDisplay").innerHTML = `
         <h1>CB Info</h1>
+        <p> name: ${firstName} ${lastName}</p>
         <p> speed: ${obj.cbSpeed} </p>
         <p> accel: ${obj.cbAccel} </p>
         <p> cover: ${obj.cover} </p>
         <p> catching: ${obj.cbCatch} </p>
     `;
+};
+
+const openDisplayUpdate = () => {
+  document.getElementById("wrOpenDisplay").innerHTML = `
+    <h1>WR Open?</h1>
+    <p> ${openProxy.value} </p>
+`;
 };
 
 const wrWinnerDec = (marginOfV) => {
@@ -152,8 +175,6 @@ const battle = (obj1Stat, obj2Stat, marginOfV, adv) => {
   let advHolder = Object.keys(adv)[0];
   let advAmount = Object.values(adv)[0];
 
-  console.log({ advHolder, advAmount });
-
   // Working on making the "adv" argument optional
   if (advHolder.includes("WR")) {
     wrMin += advAmount;
@@ -167,9 +188,11 @@ const battle = (obj1Stat, obj2Stat, marginOfV, adv) => {
   if (wrRes > cbRes) {
     openProxy.value = true;
     marginOfV = wrRes - cbRes;
+    openDisplayUpdate();
     return wrWinnerDec(marginOfV);
   } else if (cbRes > wrRes) {
     marginOfV = cbRes - wrRes;
+    openDisplayUpdate();
     return cbWinnerDec(marginOfV);
   } else {
     console.log("Push");
@@ -203,30 +226,152 @@ let speedRes;
 let coverRes;
 let catchRes;
 
-let accelBattle = () => {
+const accelBattle = () => {
   accelRes = accelStart(wrObj.wrAccel, cbObj.cbAccel, accelMarginOfV);
-  console.log({ accelRes });
-  console.log(openProxy.value);
   accelMarginOfV = Object.values(accelRes)[0];
 };
 
-let speedBattle = () => {
-  console.log({ accelRes });
+const speedBattle = () => {
   speedRes = battle(wrObj.wrSpeed, cbObj.cbSpeed, speedMarginOfV, accelRes);
-  console.log({ speedRes });
-  console.log(openProxy.value);
   speedMarginOfV = Object.values(speedRes)[0];
 };
 
-const shortRoute = () => {
+// Need to separate coverage battles from catch battles
+const coverRouteBattleOpen = () => {
+  let cbHand = accelMarginOfV;
+
+  let wrCatchTarget = Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch;
+  let cbCatchTarget = Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch;
+
+  let wrCatchCheck = Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch;
+  let cbCatchCheck =
+    Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch - cbHand;
+  console.log({ wrCatchCheck, wrCatchTarget });
+  console.log({ cbCatchCheck, cbCatchTarget });
+
+  if (cbCatchCheck >= wrCatchCheck) {
+    alert("PBU");
+  } else if (wrCatchCheck < wrCatchTarget) {
+    alert("Damn, butterfingers!");
+  } else if (wrCatchCheck >= wrCatchTarget) {
+    alert("Ball Caught!");
+  }
+};
+
+const coverRouteBattleCovered = () => {
+  let wrHand = accelMarginOfV;
+
+  let wrCatchTarget = Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch;
+  let cbCatchTarget = Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch;
+
+  let wrCatchCheck =
+    Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch - wrHand;
+  console.log({ wrCatchCheck });
+  let cbCatchCheck = Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch;
+
+  console.log({ wrCatchCheck, wrCatchTarget });
+  console.log({ cbCatchCheck, cbCatchTarget });
+
+  if (wrCatchCheck >= cbCatchCheck) {
+    alert("GET MOSSED ON!");
+  } else if (cbCatchCheck < cbCatchTarget) {
+    alert("Nice PBU");
+  } else if (cbCatchCheck >= cbCatchTarget) {
+    alert("PICK!");
+  }
+};
+
+let offTheLineBattle = () => {
   accelBattle();
   if (Object.values(accelRes)[0] < 10) {
     // We'd do a speedBattle then have the wrOpen variable update
     // after half a second
     setTimeout(() => {
       speedBattle();
-    }, 1000);
-    console.log(speedRes);
+    }, 500);
+  }
+};
+
+// Ideally, each play will have 2WR - 5WR sets. In your first season, unless you start balling out, you won't have playcalling ability.
+// We'll separate the
+
+const shortRoute = () => {
+  offTheLineBattle();
+};
+
+const medRoute = () => {
+  // Here we take the best two out of three results to determine if a WR is open or not.
+  // The battles will go like this: one accel battle off the line. one speed battle after that,
+  // then the cover v route running battle. Next battle is speed again, then cover v route running.
+  // Last battle is accel, then speed then cover v route running
+};
+
+const deepRoute = () => {
+  // Here we take the best three out of five results to determine if a WR is open or not.
+  //   These battles go in the same basic order as the medRoute battles, with a repeat of battles two and three.
+};
+
+const wrOpenRoll = () => {
+  let throwStrMin = qbObj.armStr;
+  let throwAccMin = qbObj.armAcc;
+
+  let throwTargetStr =
+    Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
+  let throwTargetAcc =
+    Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
+
+  let strCheck =
+    Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
+  let accCheck =
+    Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
+
+  if (strCheck >= throwTargetStr) {
+    console.log("str good!");
+    if (accCheck >= throwTargetAcc) {
+      console.log("acc good!");
+      // If the arm str and acc are good, there's no QB penalty in the catch battle
+      // the losing CB gets a penalty to their catch check. They can still get a PBU
+      coverRouteBattleOpen();
+    } else {
+      console.log("Wild Throw");
+    }
+  } else {
+    console.log("Underthrown");
+  }
+};
+
+const wrCoveredRoll = () => {
+  let throwStrMin = qbObj.armStr;
+  let throwAccMin = qbObj.armAcc;
+
+  let throwTargetStr =
+    Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
+  let throwTargetAcc =
+    Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
+
+  let strCheck =
+    Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
+  let accCheck =
+    Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
+
+  if (strCheck >= throwTargetStr) {
+    console.log("str good!");
+    if (accCheck >= throwTargetAcc) {
+      console.log("acc good!");
+      coverRouteBattleCovered();
+    } else {
+      console.log("Wild Throw");
+    }
+  } else {
+    console.log("Underthrown");
+  }
+};
+
+const throwToCatch = () => {
+  if (openProxy.value === true) {
+    wrOpenRoll();
+  } else if (openProxy.value === false) {
+    wrCoveredRoll();
   }
 };
 
@@ -243,15 +388,13 @@ cbButton.addEventListener("click", function () {
 });
 
 shortRouteButton.addEventListener("click", function () {
-  let cbCatch = cbObj.cbCatch;
-  let wrCatch = wrObj.wrCatch;
-
   shortRoute(wrObj.wrAccel, cbObj.cbAccel);
 
   let display = document.createElement("div");
   display.id = "wrOpenDisplay";
 
   document.body.appendChild(display);
+  // We have to update the innerHTML of this display every time the openProxy updates
   document.getElementById("wrOpenDisplay").innerHTML = `
         <h1>WR Open?</h1>
         <p> ${openProxy.value} </p>
@@ -268,114 +411,7 @@ shortRouteButton.addEventListener("click", function () {
   let throwButton = document.getElementById("throwButton");
 
   throwButton.addEventListener("click", function () {
-    let max = 100;
     console.log({ accelMarginOfV });
-    if (openProxy.value === true) {
-      // This is the handicap that the CB has in this contest, as they've lost the accel battle
-      let cbHand = accelMarginOfV;
-      console.log({ cbHand });
-
-      let throwStrMin = qbObj.armStr;
-      let throwAccMin = qbObj.armAcc;
-
-      let wrCatch = wrObj.wrCatch;
-      let cbCatch = cbObj.cbCatch;
-
-      let throwTargetStr =
-        Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
-      let throwTargetAcc =
-        Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
-
-      let strCheck =
-        Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
-      let accCheck =
-        Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
-
-      if (strCheck >= throwTargetStr) {
-        console.log("str good!");
-        if (accCheck >= throwTargetAcc) {
-          console.log("acc good!");
-          // If the arm str and acc are good, there's no QB penalty in the catch battle
-          // the losing CB gets a penalty to their catch check. They can still get a PBU
-          let wrCatchTarget =
-            Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch;
-          let cbCatchTarget =
-            Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch;
-
-          let wrCatchCheck =
-            Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch;
-          let cbCatchCheck =
-            Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch - cbHand;
-          console.log({ wrCatchCheck, wrCatchTarget });
-          console.log({ cbCatchCheck, cbCatchTarget });
-
-          if (cbCatchCheck >= wrCatchCheck) {
-            alert("PBU");
-          } else if (wrCatchCheck < wrCatchTarget) {
-            alert("Damn, butterfingers!");
-          } else if (wrCatchCheck >= wrCatchTarget) {
-            alert("Ball Caught!");
-          }
-        } else {
-          console.log("Wild Throw");
-        }
-      } else {
-        console.log("Underthrown");
-      }
-    } else if (openProxy.value === false) {
-      // This is the handicap that the CB has in this contest, as they've lost the accel battle
-      let wrHand = accelMarginOfV;
-
-      let throwStrMin = qbObj.armStr;
-      let throwAccMin = qbObj.armAcc;
-
-      let wrCatch = wrObj.wrCatch;
-      let cbCatch = cbObj.cbCatch;
-
-      let throwTargetStr =
-        Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
-      let throwTargetAcc =
-        Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
-
-      let strCheck =
-        Math.floor(Math.random() * (max - throwStrMin + 1)) + throwStrMin;
-      let accCheck =
-        Math.floor(Math.random() * (max - throwAccMin + 1)) + throwAccMin;
-
-      if (strCheck >= throwTargetStr) {
-        console.log("str good!");
-        if (accCheck >= throwTargetAcc) {
-          console.log("acc good!");
-          console.log({ wrHand });
-          // If the arm str and acc are good, there's no QB penalty in the catch battle
-          // the losing CB gets a penalty to their catch check. They can still get a PBU
-          let wrCatchTarget =
-            Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch;
-          let cbCatchTarget =
-            Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch;
-
-          let wrCatchCheck =
-            Math.floor(Math.random() * (max - wrCatch + 1)) + wrCatch - wrHand;
-          console.log({ wrCatchCheck });
-          let cbCatchCheck =
-            Math.floor(Math.random() * (max - cbCatch + 1)) + cbCatch;
-
-          console.log({ wrCatchCheck, wrCatchTarget });
-          console.log({ cbCatchCheck, cbCatchTarget });
-
-          if (wrCatchCheck >= cbCatchCheck) {
-            alert("GET MOSSED ON!");
-          } else if (cbCatchCheck < cbCatchTarget) {
-            alert("Nice PBU");
-          } else if (cbCatchCheck >= cbCatchTarget) {
-            alert("PICK!");
-          }
-        } else {
-          console.log("Wild Throw");
-        }
-      } else {
-        console.log("Underthrown");
-      }
-    }
+    throwToCatch();
   });
 });

@@ -1,0 +1,74 @@
+{
+    "qbFirstNames": [
+       { "firstName": "John"},
+       { "firstName": "Tyler"},
+       { "firstName": "Bryce"},
+       { "firstName": "Lamar"},
+       { "firstName": "Drew"},
+       { "firstName": "Ayden"},
+       { "firstName": "Patrick"},
+       { "firstName": "Pence"},
+       { "firstName": "Brandon"},
+       { "firstName": "Fester"}
+    ],
+    "qbLastNames":[
+        {"lastName": "Washington"},
+        {"lastName": "Breese"},
+        {"lastName": "Di Paolo"},
+        {"lastName": "Pace"},
+        {"lastName": "Martinez"},
+        {"lastName": "Davis"},
+        {"lastName": "Miller"},
+        {"lastName": "Jordan"},
+        {"lastName": "Pascal"},
+        {"lastName": "Koonce"}
+    ],
+    "wrFirstNames": [
+        {"firstName": "DeMarion"},
+        {"firstName": "DeShawn"},
+        {"firstName": "Brandon"},
+        {"firstName": "KaMonte"},
+        {"firstName": "DJ"},
+        {"firstName": "Jeremiah"},
+        {"firstName": "Nico"},
+        {"firstName": "Zak"},
+        {"firstName": "Jakorian"},
+        {"firstName": "Tyler"}
+    ],
+    "wrLastNames": [
+        {"lastName": "Mack"},
+        {"lastName": "Jackson"},
+        {"lastName": "Walker"},
+        {"lastName": "Washington"},
+        {"lastName": "Rodriguez"},
+        {"lastName": "Paxton"},
+        {"lastName": "Berg"},
+        {"lastName": "Mills"},
+        {"lastName": "Davis"},
+        {"lastName": "Reese"}
+    ],
+    "cbFirstNames": [
+        {"firstName": "Brandon"},
+        {"firstName": "Malcolm"},
+        {"firstName": "Terrence"},
+        {"firstName": "Eddie"},
+        {"firstName": "Elroy"},
+        {"firstName": "Emmanuel"},
+        {"firstName": "Mike"},
+        {"firstName": "Shaq"},
+        {"firstName": "Pete"},
+        {"firstName": "Ali"}
+    ],
+    "cbLastNames": [
+        {"lastName": "Muhammad"},
+        {"lastName": "Thomas"},
+        {"lastName": "Smith"},
+        {"lastName": "Reilly"},
+        {"lastName": "Benz"},
+        {"lastName": "Winchester"},
+        {"lastName": "Washington"},
+        {"lastName": "Spencer"},
+        {"lastName": "Mills"},
+        {"lastName": "Pace"}
+    ]
+}
