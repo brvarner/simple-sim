@@ -1,6 +1,4 @@
 import {
-  wrWinnerDec,
-  cbWinnerDec,
   battle,
   accelStart,
   accelBattle,
@@ -13,31 +11,15 @@ import {
   wrOpenRoll,
   wrCoveredRoll,
   throwToCatch,
-  wrObjFiller,
-  cbObjFiller,
-  qbObjFiller,
 } from "./functions/functions.js";
+import { wrCreator, wrWinnerDec } from "./functions/wrFunctions.js";
+import { cbCreator, cbWinnerDec } from "./functions/cbFunctions.js";
+import { qbCreator } from "./functions/qbFunctions.js";
 
 const qbButton = document.getElementById("qbButton");
 const wrButton = document.getElementById("wrButton");
 const cbButton = document.getElementById("cbButton");
 const shortRouteButton = document.getElementById("shortRoute");
-
-let speed = 0;
-let accel = 0;
-let armStr = 0;
-let armAcc = 0;
-let decMak = 0;
-
-let wrSpeed = 0;
-let wrAccel = 0;
-let routeR = 0;
-let wrCatch = 0;
-
-let cbSpeed = 0;
-let cbAccel = 0;
-let cover = 0;
-let cbCatch = 0;
 
 let accelRes;
 let speedRes;
@@ -48,30 +30,6 @@ let accelMarginOfV;
 let speedMarginOfV;
 let coverMarginOfV;
 let catchMarginOfV;
-
-const qbObj = {
-  speed,
-  accel,
-  armStr,
-  armAcc,
-  decMak,
-};
-
-const wrObj = {
-  wrSpeed,
-  wrAccel,
-  routeR,
-  wrCatch,
-  elusiveness,
-};
-
-const cbObj = {
-  cbSpeed,
-  cbAccel,
-  cover,
-  cbCatch,
-  tackling,
-};
 
 // Vanilla JS Proxies allow for real time changes to be made in DOM.
 // In React we'd probably just deploy this as a state.
@@ -87,34 +45,24 @@ const openProxy = new Proxy(wrOpen, openHandler);
 
 let qb;
 
-const wrObj2 = structuredClone(wrObj);
-const wrObj3 = structuredClone(wrObj);
-
-let wrObjArr = [wrObj, wrObj2, wrObj3];
-
 let wr1;
 let wr2;
 let slotWr;
-
-const cbObj2 = structuredClone(cbObj);
-const cbObj3 = structuredClone(cbObj);
-
-let cbObjArr = [cbObj, cbObj2, cbObj3];
 
 let cb1;
 let cb2;
 let slotCb;
 
 qbButton.addEventListener("click", function () {
-  qbObjFiller(qbObj, qb);
+  qbCreator(qb);
 });
 
 wrButton.addEventListener("click", function () {
-  wrObjFiller(wrObjArr, wr1, wr2, slotWr);
+  wrCreator(wr1, wr2, slotWr);
 });
 
 cbButton.addEventListener("click", function () {
-  cbObjFiller(cbObjArr, cb1, cb2, slotCb);
+  cbCreator(cb1, cb2, slotCb);
 });
 
 shortRouteButton.addEventListener("click", function () {

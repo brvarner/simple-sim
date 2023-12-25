@@ -1,4 +1,4 @@
-import { statRoll, statRollWAdv } from "../functions/functions.js";
+import { statRoll, statRollWAdv, statGen } from "../functions/functions.js";
 
 let nameData;
 fetch("../names.json")
@@ -11,13 +11,24 @@ export default class Receiver {
   firstName = Object.values(nameData.wrFirstNames[(Math.random() * 10) | 0])[0];
   lastName = Object.values(nameData.wrLastNames[(Math.random() * 10) | 0])[0];
 
-  constructor(skills) {
+  wrSpeed = statGen(60, 99);
+  wrAccel = statGen(60, 99);
+  shortRoute = statGen(60, 99);
+  medRoute = statGen(60, 99);
+  deepRoute = statGen(60, 99);
+  wrCatch = statGen(60, 99);
+  elusiveness = statGen(60, 99);
+
+  //   Receivers need short, medium, and deep route running skills
+  constructor() {
     this.name = `${this.firstName} ${this.lastName}`;
-    this.wrSpeed = skills.wrSpeed;
-    this.wrAccel = skills.wrAccel;
-    this.routeR = skills.routeR;
-    this.wrCatch = skills.wrCatch;
-    this.elusiveness = skills.elusiveness;
+    this.wrSpeed = this.wrSpeed;
+    this.wrAccel = this.wrAccel;
+    this.shortRoute = this.shortRoute;
+    this.medRoute = this.medRoute;
+    this.deepRoute = this.deepRoute;
+    this.wrCatch = this.wrCatch;
+    this.elusiveness = this.elusiveness;
   }
 
   getSpeed() {
@@ -28,8 +39,16 @@ export default class Receiver {
     return this.wrAccel;
   }
 
-  getRouteR() {
-    return this.routeR;
+  getShortRoute() {
+    return this.shortRoute;
+  }
+
+  getMedRoute() {
+    return this.medRoute;
+  }
+
+  getDeepRoute() {
+    return this.deepRoute;
   }
 
   getCatch() {
@@ -39,14 +58,26 @@ export default class Receiver {
   runShortRoute() {
     let accRes = statRoll(this.wrAccel);
     let speedRes = statRoll(this.wrSpeed);
-    let routeRes = statRoll(this.routeR);
+    let routeRes = statRoll(this.shortRoute);
 
     return { accRes, speedRes, routeRes };
   }
 
-  runMediumRoute() {}
+  runMediumRoute() {
+    let accRes = statRoll(this.wrAccel);
+    let speedRes = statRoll(this.wrSpeed);
+    let routeRes = statRoll(this.medRoute);
 
-  runDeepRoute() {}
+    return { accRes, speedRes, routeRes };
+  }
+
+  runDeepRoute() {
+    let accRes = statRoll(this.wrAccel);
+    let speedRes = statRoll(this.wrSpeed);
+    let routeRes = statRoll(this.deepRoute);
+
+    return { accRes, speedRes, routeRes };
+  }
 
   catch() {
     let catchTarget = statRoll(this.wrCatch);
@@ -59,3 +90,5 @@ export default class Receiver {
     }
   }
 }
+
+// We'll extend this with classes for different archetypes

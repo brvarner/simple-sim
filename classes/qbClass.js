@@ -1,4 +1,5 @@
-import { statRoll, statRollWAdv, max } from "../functions/functions.js";
+import { statRoll, statRollWAdv, statGen } from "../functions/functions.js";
+
 let nameData;
 fetch("../names.json")
   .then((res) => res.json())
@@ -10,13 +11,24 @@ export default class QB {
   firstName = Object.values(nameData.qbFirstNames[(Math.random() * 10) | 0])[0];
   lastName = Object.values(nameData.qbLastNames[(Math.random() * 10) | 0])[0];
 
-  constructor(skills) {
+  speed = statGen(60, 99);
+  accel = statGen(60, 99);
+  armStr = statGen(60, 99);
+  shortAcc = statGen(60, 99);
+  medAcc = statGen(60, 99);
+  deepAcc = statGen(60, 99);
+  decMak = statGen(60, 99);
+
+  //   QBs need short, medium, and deep throw accuracies
+  constructor() {
     this.name = `${this.firstName} ${this.lastName}`;
-    this.speed = skills.speed;
-    this.accel = skills.accel;
-    this.armStr = skills.armStr;
-    this.armAcc = skills.armAcc;
-    this.decMak = skills.decMak;
+    this.speed = this.speed;
+    this.accel = this.accel;
+    this.armStr = this.armStr;
+    this.shortAcc = this.shortAcc;
+    this.medAcc = this.medAcc;
+    this.deepAcc = this.deepAcc;
+    this.decMak = this.decMak;
   }
 
   getSpeed() {
@@ -31,8 +43,16 @@ export default class QB {
     return this.armStr;
   }
 
-  getArmAcc() {
-    return this.armAcc;
+  getShortAcc() {
+    return this.shortAcc;
+  }
+
+  getMedAcc() {
+    return this.medAcc;
+  }
+
+  getDeepAcc() {
+    return this.deepAcc;
   }
 
   getDecMak() {
@@ -40,15 +60,27 @@ export default class QB {
   }
 
   throwShort() {
-    let acc = statRoll(this.armAcc, max);
-    let str = statRoll(this.armStr, max);
+    let acc = statRoll(this.shortAcc);
+    let str = statRoll(this.armStr);
 
     return { acc, str };
   }
 
-  throwMed() {}
+  throwMed() {
+    let acc = statRoll(this.medAcc);
+    let str = statRoll(this.armStr);
 
-  throwDeep() {}
+    return { acc, str };
+  }
+
+  throwDeep() {
+    let acc = statRoll(this.deepAcc);
+    let str = statRoll(this.armStr);
+
+    return { acc, str };
+  }
 
   scramble() {}
 }
+
+// We'll extend this with classes for different archetypes
