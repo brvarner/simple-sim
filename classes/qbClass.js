@@ -7,7 +7,7 @@ fetch("../names.json")
     nameData = data;
   });
 
-export default class QB {
+class QB {
   firstName = Object.values(nameData.qbFirstNames[(Math.random() * 10) | 0])[0];
   lastName = Object.values(nameData.qbLastNames[(Math.random() * 10) | 0])[0];
 
@@ -84,3 +84,35 @@ export default class QB {
 }
 
 // We'll extend this with classes for different archetypes
+export class pocketPasser extends QB {
+  constructor() {
+    super();
+    this.accel = this.accel - 15;
+    this.speed = this.speed - 15;
+    this.shortAcc = this.shortAcc + 10;
+    this.medAcc = this.medAcc + 10;
+    this.deepAcc = this.deepAcc + 10;
+  }
+}
+
+export class dualThreat extends QB {
+  constructor() {
+    super();
+    this.accel = this.accel + 15;
+    this.speed = this.speed + 15;
+    this.shortAcc = this.shortAcc - 10;
+    this.medAcc = this.medAcc - 10;
+    this.deepAcc = this.deepAcc - 10;
+  }
+}
+
+export class balancedQB extends QB {
+  constructor() {
+    super();
+    this.accel = this.accel + 5;
+    this.speed = this.speed + 5;
+    this.shortAcc = this.shortAcc + 5;
+    this.medAcc = this.medAcc + 5;
+    this.deepAcc = this.deepAcc + 5;
+  }
+}

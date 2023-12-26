@@ -1,3 +1,3 @@
-export { default as Corner } from "./cbClass.js";
-export { default as Receiver } from "./wrClass.js";
-export { default as QB } from "./qbClass.js";
+export { cbOne, cbTwo, slotCorner } from "./cbClass.js";
+export { wrOne, wrTwo, slotReceiver } from "./wrClass.js";
+export { pocketPasser, dualThreat, balancedQB } from "./qbClass.js";

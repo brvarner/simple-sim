@@ -6,8 +6,6 @@ import {
   offTheLineBattle,
   coverRouteBattleOpen,
   shortRoute,
-  medRoute,
-  deepRoute,
   wrOpenRoll,
   wrCoveredRoll,
   throwToCatch,
@@ -42,6 +40,8 @@ const openHandler = {
 };
 
 const openProxy = new Proxy(wrOpen, openHandler);
+const openProxy2 = new Proxy(wrOpen, openHandler);
+const slotOpenProxy = new Proxy(wrOpen, openHandler);
 
 let qb;
 

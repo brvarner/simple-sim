@@ -1,10 +1,10 @@
 import { statGen } from "./functions.js";
-import { Corner } from "../classes/index.js";
+import { cbOne, cbTwo, slotCorner } from "../classes/index.js";
 
 export function cbCreator(cb1, cb2, slotCb) {
-  cb1 = new Corner();
-  cb2 = new Corner();
-  slotCb = new Corner();
+  cb1 = new cbOne();
+  cb2 = new cbTwo();
+  slotCb = new slotCorner();
 
   let display = document.createElement("div");
   display.id = "cbDisplay";

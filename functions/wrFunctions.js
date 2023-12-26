@@ -1,10 +1,10 @@
 import { statGen } from "./functions.js";
-import { Receiver } from "../classes/index.js";
+import { wrOne, wrTwo, slotReceiver } from "../classes/index.js";
 
 export function wrCreator(wr1, wr2, slotWr) {
-  wr1 = new Receiver();
-  wr2 = new Receiver();
-  slotWr = new Receiver();
+  wr1 = new wrOne();
+  wr2 = new wrTwo();
+  slotWr = new slotReceiver();
 
   let display = document.createElement("div");
   display.id = "wrDisplay";

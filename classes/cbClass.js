@@ -7,7 +7,7 @@ fetch("../names.json")
     nameData = data;
   });
 
-export default class Corner {
+class Corner {
   firstName = Object.values(nameData.cbFirstNames[(Math.random() * 10) | 0])[0];
   lastName = Object.values(nameData.cbLastNames[(Math.random() * 10) | 0])[0];
 
@@ -51,9 +51,23 @@ export default class Corner {
   }
 
   //   The longer a corner has to cover, the more their disadvantage grows
-  coverMedRoute() {}
+  coverMedRoute() {
+    const medRoutePenalty = -10;
+    let accRes = statRoll(this.cbAccel);
+    let speedRes = statRoll(this.cbSpeed);
+    let coverRes = statRoll(this.cover) - medRoutePenalty;
 
-  coverDeepRoute() {}
+    return { accRes, speedRes, coverRes };
+  }
+
+  coverDeepRoute() {
+    const deepRoutePenalty = -15;
+    let accRes = statRoll(this.cbAccel);
+    let speedRes = statRoll(this.cbSpeed);
+    let coverRes = statRoll(this.cover) - deepRoutePenalty;
+
+    return { accRes, speedRes, coverRes };
+  }
 
   catch() {
     let catchTarget = statRoll(this.cbCatch);
@@ -68,3 +82,20 @@ export default class Corner {
 }
 
 // We'll extend this with classes for different archetypes
+export class cbOne extends Corner {
+  constructor() {
+    super();
+  }
+}
+
+export class cbTwo extends Corner {
+  constructor() {
+    super();
+  }
+}
+
+export class slotCorner extends Corner {
+  constructor() {
+    super();
+  }
+}

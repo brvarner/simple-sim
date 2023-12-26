@@ -1,7 +1,10 @@
-import { QB } from "../classes/index.js";
+import { pocketPasser, dualThreat, balancedQB } from "../classes/index.js";
 
 export function qbCreator(qb) {
-  qb = new QB();
+  const qbTypeArray = [pocketPasser, dualThreat, balancedQB];
+  let randomizer = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+  let qbType = qbTypeArray[randomizer];
+  qb = new qbType();
 
   let display = document.createElement("div");
   display.id = "qbDisplay";

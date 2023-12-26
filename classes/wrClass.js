@@ -7,7 +7,7 @@ fetch("../names.json")
     nameData = data;
   });
 
-export default class Receiver {
+class Receiver {
   firstName = Object.values(nameData.wrFirstNames[(Math.random() * 10) | 0])[0];
   lastName = Object.values(nameData.wrLastNames[(Math.random() * 10) | 0])[0];
 
@@ -92,3 +92,26 @@ export default class Receiver {
 }
 
 // We'll extend this with classes for different archetypes
+export class wrOne extends Receiver {
+  constructor() {
+    super();
+    this.medRoute = this.medRoute + 10;
+    this.deepRoute = this.deepRoute + 10;
+  }
+}
+
+export class wrTwo extends Receiver {
+  constructor() {
+    super();
+    this.shortRoute = this.shortRoute + 10;
+    this.deepRoute = this.deepRoute + 10;
+  }
+}
+
+export class slotReceiver extends Receiver {
+  constructor() {
+    super();
+    this.shortRoute = this.shortRoute + 10;
+    this.medRoute = this.medRoute + 10;
+  }
+}

@@ -1,4 +1,11 @@
-import { Receiver, Corner, QB } from "../classes/index.js";
+import {
+  slotReceiver,
+  wrOne,
+  wrTwo,
+  pocketPasser,
+  dualThreat,
+  balancedQB,
+} from "../classes/index.js";
 
 export const max = Math.floor(100);
 
