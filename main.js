@@ -1,18 +1,18 @@
-import {
-  battle,
-  accelStart,
-  accelBattle,
-  coverRouteBattleCovered,
-  offTheLineBattle,
-  coverRouteBattleOpen,
-  shortRoute,
-  wrOpenRoll,
-  wrCoveredRoll,
-  throwToCatch,
-} from "./functions/functions.js";
+import {} from "./functions/functions.js";
 import { wrCreator, wrWinnerDec } from "./functions/wrFunctions.js";
 import { cbCreator, cbWinnerDec } from "./functions/cbFunctions.js";
 import { qbCreator } from "./functions/qbFunctions.js";
+import {
+  wrOne,
+  wrTwo,
+  slotReceiver,
+  pocketPasser,
+  dualThreat,
+  balancedQB,
+  cbOne,
+  cbTwo,
+  slotCorner,
+} from "./classes/index.js";
 
 const qbButton = document.getElementById("qbButton");
 const wrButton = document.getElementById("wrButton");
@@ -58,38 +58,22 @@ qbButton.addEventListener("click", function () {
 });
 
 wrButton.addEventListener("click", function () {
+  wr1 = new wrOne();
+  wr2 = new wrTwo();
+  slotWr = new slotReceiver();
   wrCreator(wr1, wr2, slotWr);
 });
 
 cbButton.addEventListener("click", function () {
+  cb1 = new cbOne();
+  cb2 = new cbTwo();
+  slotCb = new slotCorner();
   cbCreator(cb1, cb2, slotCb);
 });
 
 shortRouteButton.addEventListener("click", function () {
-  shortRoute(wrObj.wrAccel, cbObj.cbAccel);
-
-  let display = document.createElement("div");
-  display.id = "wrOpenDisplay";
-
-  document.body.appendChild(display);
-  // We have to update the innerHTML of this display every time the openProxy updates
-  document.getElementById("wrOpenDisplay").innerHTML = `
-        <h1>WR Open?</h1>
-        <p> ${openProxy.value} </p>
-    `;
-
-  let button = document.createElement("button");
-  button.id = "throwButton";
-
-  document.body.appendChild(button);
-  document.getElementById("throwButton").innerHTML = `
-    Throw
-    `;
-
-  let throwButton = document.getElementById("throwButton");
-
-  throwButton.addEventListener("click", function () {
-    console.log({ accelMarginOfV });
-    throwToCatch();
-  });
+  let wrAccel = wr1.getAccel();
+  let cbAccel = cb1.getAccel();
+  shortRoute(wrAccel, cbAccel);
+  throwButtonAppear(openProxy.value);
 });
