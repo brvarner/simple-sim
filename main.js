@@ -1,7 +1,26 @@
-import {} from "./functions/functions.js";
-import { wrCreator, wrWinnerDec } from "./functions/wrFunctions.js";
-import { cbCreator, cbWinnerDec } from "./functions/cbFunctions.js";
-import { qbCreator } from "./functions/qbFunctions.js";
+import {
+  statGen,
+  statRoll,
+  statRollWAdv,
+  throwButtonAppear,
+  battle,
+  accelStart,
+  accelBattle,
+  speedBattle,
+  coverRouteBattleCovered,
+  shortRoute,
+  medRoute,
+  deepRoute,
+  coverRouteBattleOpen,
+  wrOpenRoll,
+  wrCoveredRoll,
+  throwToCatch,
+  qbCreator,
+  cbCreator,
+  cbWinnerDec,
+  wrCreator,
+  wrWinnerDec,
+} from "./functions/index.js";
 import {
   wrOne,
   wrTwo,
@@ -74,6 +93,20 @@ cbButton.addEventListener("click", function () {
 shortRouteButton.addEventListener("click", function () {
   let wrAccel = wr1.getAccel();
   let cbAccel = cb1.getAccel();
-  shortRoute(wrAccel, cbAccel);
-  throwButtonAppear(openProxy.value);
+  let wrSpeed = wr1.getSpeed();
+  let cbSpeed = cb1.getSpeed();
+  let openValue = openProxy.value;
+  shortRoute(
+    wrAccel,
+    wrSpeed,
+    cbAccel,
+    cbSpeed,
+    accelRes,
+    speedRes,
+    accelMarginOfV,
+    speedMarginOfV,
+    openValue
+  );
+  console.log({ accelRes, speedRes });
+  throwButtonAppear(openValue);
 });

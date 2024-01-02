@@ -1,3 +1,6 @@
+import { wrWinnerDec, cbWinnerDec } from "./index.js";
+import { max } from "./functions.js";
+
 export function battle(wrStat, cbStat, marginOfV, adv, openValue) {
   let wrMin = Math.ceil(wrStat);
   let cbMin = Math.ceil(cbStat);
@@ -49,9 +52,17 @@ export function accelStart(wrAccel, cbAccel, marginOfV, openValue) {
   }
 }
 
-export function accelBattle(wrAccel, cbAccel, accelMarginOfV, openValue) {
+export function accelBattle(
+  wrAccel,
+  cbAccel,
+  accelRes,
+  accelMarginOfV,
+  openValue
+) {
   accelRes = accelStart(wrAccel, cbAccel, accelMarginOfV, openValue);
   accelMarginOfV = Object.values(accelRes)[0];
+
+  return { accelRes, accelMarginOfV };
 }
 
 export function speedBattle(
@@ -59,10 +70,13 @@ export function speedBattle(
   cbSpeed,
   speedMarginOfV,
   accelRes,
+  speedRes,
   openValue
 ) {
   speedRes = battle(wrSpeed, cbSpeed, speedMarginOfV, accelRes, openValue);
   speedMarginOfV = Object.values(speedRes)[0];
+
+  return { speedRes, speedMarginOfV };
 }
 
 export function coverRouteBattleCovered(wrCatch, cbCatch, accelMarginOfV) {
@@ -91,8 +105,46 @@ export function coverRouteBattleCovered(wrCatch, cbCatch, accelMarginOfV) {
 // Ideally, each play will have 2WR - 5WR sets. In your first season, unless you start balling out, you won't have playcalling ability.
 // We'll separate the
 
-export function shortRoute(wrAccel, cbAccel) {
-  offTheLineBattle(wrAccel, cbAccel);
+// We need to return every value and assign it again in the main file
+export function shortRoute(
+  wrAccel,
+  wrSpeed,
+  cbAccel,
+  cbSpeed,
+  accelRes,
+  speedRes,
+  accelMarginOfV,
+  speedMarginOfV,
+  openValue
+) {
+  const results = accelBattle(
+    wrAccel,
+    cbAccel,
+    accelRes,
+    accelMarginOfV,
+    openValue
+  );
+  accelRes = results.accelRes;
+  accelMarginOfV = results.accelMarginOfV;
+  console.log(accelRes);
+  if (accelRes && Object.values(accelRes)[0] < 10) {
+    // We'd do a speedBattle then have the wrOpen variable update
+    // after half a second
+    setTimeout(() => {
+      const speedResults = speedBattle(
+        wrSpeed,
+        cbSpeed,
+        speedMarginOfV,
+        accelRes,
+        speedRes,
+        openValue
+      );
+
+      speedRes = speedResults.speedRes;
+      speedMarginOfV = speedResults.speedMarginOfV;
+      console.log({ accelRes, speedRes });
+    }, 500);
+  }
 }
 
 export function medRoute() {

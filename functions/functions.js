@@ -1,12 +1,3 @@
-import {
-  slotReceiver,
-  wrOne,
-  wrTwo,
-  pocketPasser,
-  dualThreat,
-  balancedQB,
-} from "../classes/index.js";
-
 export const max = Math.floor(100);
 
 export function statGen(min, maxArg) {
