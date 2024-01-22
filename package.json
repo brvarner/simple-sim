@@ -1,0 +1,29 @@
+{
+  "name": "js-sim",
+  "version": "1.0.0",
+  "description": "A vanilla JS quarterback simulation game",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brvarner/simple-sim.git"
+  },
+  "author": "Brandon Varner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brvarner/simple-sim/issues"
+  },
+  "homepage": "https://github.com/brvarner/simple-sim#readme",
+  "dependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/preset-env": "^7.23.8",
+    "@testing-library/dom": "^9.3.4",
+    "@testing-library/jest-dom": "^6.2.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jsdom": "^24.0.0",
+    "serve": "^14.2.1"
+  }
+}

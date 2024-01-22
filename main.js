@@ -96,7 +96,7 @@ shortRouteButton.addEventListener("click", function () {
   let wrSpeed = wr1.getSpeed();
   let cbSpeed = cb1.getSpeed();
   let openValue = openProxy.value;
-  shortRoute(
+  let routeRes = shortRoute(
     wrAccel,
     wrSpeed,
     cbAccel,
@@ -107,6 +107,8 @@ shortRouteButton.addEventListener("click", function () {
     speedMarginOfV,
     openValue
   );
+  accelRes = routeRes.accelRes;
+  speedRes = routeRes.speedRes;
   console.log({ accelRes, speedRes });
   throwButtonAppear(openValue);
 });

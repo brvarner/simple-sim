@@ -1,6 +1,17 @@
 import { wrWinnerDec, cbWinnerDec } from "./index.js";
 import { max } from "./functions.js";
 
+function openDisplayUpdate(openValue) {
+  switch (openValue) {
+    case true:
+      openValue.value = true;
+      break;
+    case false:
+      break;
+  }
+  return openValue;
+}
+
 export function battle(wrStat, cbStat, marginOfV, adv, openValue) {
   let wrMin = Math.ceil(wrStat);
   let cbMin = Math.ceil(cbStat);
@@ -15,15 +26,16 @@ export function battle(wrStat, cbStat, marginOfV, adv, openValue) {
     cbMin += advAmount;
   }
   let cbRes = Math.floor(Math.random() * (max - cbMin + 1)) + cbMin;
+  let wrRes = Math.floor(Math.random() * (max - cbMin + 1)) + wrMin;
 
   if (wrRes > cbRes) {
     openValue = true;
     marginOfV = wrRes - cbRes;
-    openDisplayUpdate();
+    openDisplayUpdate(openValue);
     return wrWinnerDec(marginOfV);
   } else if (cbRes > wrRes) {
     marginOfV = cbRes - wrRes;
-    openDisplayUpdate();
+    openDisplayUpdate(openValue);
     return cbWinnerDec(marginOfV);
   } else {
     console.log("Push");
@@ -130,20 +142,24 @@ export function shortRoute(
   if (accelRes && Object.values(accelRes)[0] < 10) {
     // We'd do a speedBattle then have the wrOpen variable update
     // after half a second
-    setTimeout(() => {
-      const speedResults = speedBattle(
-        wrSpeed,
-        cbSpeed,
-        speedMarginOfV,
-        accelRes,
-        speedRes,
-        openValue
-      );
+    // setTimeout(() => {
+    const speedResults = speedBattle(
+      wrSpeed,
+      cbSpeed,
+      speedMarginOfV,
+      accelRes,
+      speedRes,
+      openValue
+    );
 
-      speedRes = speedResults.speedRes;
-      speedMarginOfV = speedResults.speedMarginOfV;
-      console.log({ accelRes, speedRes });
-    }, 500);
+    speedRes = speedResults.speedRes;
+    speedMarginOfV = speedResults.speedMarginOfV;
+    console.log({ accelRes, speedRes });
+    // }, 500);
+  }
+
+  if (speedRes) {
+    return { accelRes, speedRes };
   }
 }
 
